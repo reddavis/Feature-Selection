@@ -1,17 +1,38 @@
-= feature_selection
+= Feature Selection
 
-Description goes here.
+Feature Selection is a library of feature selection algorithms. 
 
-== Note on Patches/Pull Requests
- 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add tests for it. This is important so I don't break it in a
-  future version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+http://en.wikipedia.org/wiki/Feature_selection
 
+== Install
+
+  gem sources -a http://gems.github.com
+  sudo gem install feature_selection
+  
+== How To Use
+
+There are currently 3 implemented feature collections: Chi-Squared, Mutual Information and Frequency Based.
+
+Each return a hash that looks similar to:
+
+  {klass => {term => score, term => score}, klass => {term => score}}
+  
+Example:
+
+  data = {
+          :spam => [['this', 'is', 'some', 'information'], ['this', 'is', 'something', 'that', 'is', 'information']],
+          :ham => [['this', 'test', 'some', 'more', 'information'], ['there', 'are', 'some', 'things']],
+          }
+  
+  a = FeatureSelection::ChiSquared.new(data)
+  
+  # You can also use...
+  # FeatureSelection::MutualInformation
+  # FeatureSelection::FrequencyBased
+  
+  a.rank_features
+    #=> {:spam => {term => score, term => score}, :ham => {term => score}}
+          
 == Copyright
 
 Copyright (c) 2009 reddavis. See LICENSE for details.
