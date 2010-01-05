@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "feature_selection.gemspec",
      "lib/feature_selection.rb",
      "lib/feature_selection/base.rb",
      "lib/feature_selection/chi_squared.rb",
