@@ -23,13 +23,13 @@ Example:
           :spam => [['this', 'is', 'some', 'information'], ['this', 'is', 'something', 'that', 'is', 'information']],
           :ham => [['this', 'test', 'some', 'more', 'information'], ['there', 'are', 'some', 'things']],
           }
-  
+
   a = FeatureSelection::ChiSquared.new(data)
-  
+
   # You can also use...
   # FeatureSelection::MutualInformation
   # FeatureSelection::FrequencyBased
-  
+
   a.rank_features
     #=> {:spam => {term => score, term => score}, :ham => {term => score}}
           
