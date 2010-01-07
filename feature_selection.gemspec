@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{feature_selection}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["reddavis"]
-  s.date = %q{2010-01-05}
+  s.date = %q{2010-01-07}
   s.description = %q{A library of feature selection algorithms}
   s.email = %q{reddavis@gmail.com}
   s.extra_rdoc_files = [
@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
      "README.rdoc",
      "Rakefile",
      "VERSION",
+     "benchmark/benchmark.rb",
      "feature_selection.gemspec",
      "lib/feature_selection.rb",
      "lib/feature_selection/base.rb",
