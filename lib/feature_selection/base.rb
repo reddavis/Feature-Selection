@@ -157,7 +157,7 @@ module FeatureSelection
     end
     
     def terms
-      @data.map {|x| x[1]}.flatten
+      @terms ||= @data.map {|x| x[1]}.flatten
     end
     
   end

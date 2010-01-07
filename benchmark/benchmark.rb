@@ -14,8 +14,4 @@ Benchmark.bm do |x|
   x.report do
     FeatureSelection::MutualInformation.new(data).rank_features
   end
-  
-  x.report do
-    FeatureSelection::ChiSquared.new(data).rank_features
-  end
 end
