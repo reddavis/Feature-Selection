@@ -49,28 +49,44 @@ module FeatureSelection
       begin
         if t == 1 && c == 1
           n_1_1 = n_1_1(term, klass)
-                    
+          
+          # return 0 if a == 0
+          a = (n * n_1_1) / ((n_0_1 + n_1_1) * (n_1_1 + n_1_0))
+          return 0.0 if a == 0
+          
           n_1_1 / n * 
-            Math.log( (n * n_1_1) / ((n_0_1 + n_1_1) * (n_1_1 + n_1_0)) ) 
+            Math.log(a) 
         elsif t == 1 && c == 0
           n_1_1 = n_1_1(term, klass)
           n_0_0 = n_0_0(term, klass)
-        
+          
+          # return 0 if a == 0
+          a = (n * n_1_0) / ((n_1_1 + n_0_1) * (n_0_1 + n_0_0))
+          return 0.0 if a == 0
+          
           n_1_0 / n *
-            Math.log( (n * n_1_0) / ((n_1_1 + n_0_1) * (n_0_1 + n_0_0)) )
+            Math.log(a)
         elsif t == 0 && c == 1
           n_0_0 = n_0_0(term, klass)
           n_1_1 = n_1_1(term, klass)
-        
+          
+          # return 0 if a == 0
+          a = (n * n_0_1) / ((n_1_0 + n_0_0) * (n_1_1 + n_1_0))
+          return 0.0 if a == 0
+          
           n_0_1 / n *
-            Math.log( (n * n_0_1) / ((n_1_0 + n_0_0) * (n_1_1 + n_1_0)) )
+            Math.log(a)
         elsif t == 0 && c == 0
           n_0_0 = n_0_0(term, klass)
+          
+          # return 0 if a == 0
+          a = (n * n_0_0) / ((n_1_0 + n_0_0) * (n_0_1 + n_0_0))
+          return 0.0 if a == 0
         
           n_0_0 / n *
-            Math.log( (n * n_0_0) / ((n_1_0 + n_0_0) * (n_0_1 + n_0_0)) )
+            Math.log(a)
         end
-      rescue ZeroDivisionError, Errno::EDOM
+      rescue ZeroDivisionError, Errno::EDOM #1.9 Infinity
         0.0
       end
     end
