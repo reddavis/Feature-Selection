@@ -24,7 +24,7 @@ module FeatureSelection
       classes.each do |klass|
         @results[klass] = {}
         
-        terms.each do |term|
+        uniq_terms.each do |term|
           answer = calculate_contribution(term, klass)
           @results[klass][term] = answer
         end #terms.each

@@ -13,54 +13,129 @@ module FeatureSelection
     
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      count = 0.0
+      @n_1_1 = pre_compute_n_1_1 unless @n_1_1
+            
+      @n_1_1[klass][term]
+    end
+    
+    def pre_compute_n_1_1
+      results = {}
       
-      @data[klass].each do |document|
-        count += 1 if document.include?(term)
+      classes.each do |q_klass|
+        results[q_klass] = {}
+        
+        uniq_terms.each do |term|
+          count = 0.0
+
+          @data.each_pair do |klass, documents|
+            if klass == q_klass
+              documents.each do |document|
+                count += 1 if document.include?(term)
+              end
+            end
+          end
+
+          results[q_klass][term] = count
+        end
       end
-      
-      count
+
+      results
     end
     
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      count = 0.0
+      @n_1_0 = pre_compute_n_1_0 unless @n_1_0
+            
+      @n_1_0[klass][term]
+    end
+    
+    # Pre-Computer n_1_0
+    def pre_compute_n_1_0
+      results = {}
       
-      @data.each_pair do |key, documents|
-        if key != klass
-          documents.each do |document|
-            count += 1 if document.include?(term)
+      classes.each do |q_klass|
+        results[q_klass] = {}
+        
+        uniq_terms.each do |term|
+          count = 0.0
+
+          @data.each_pair do |klass, documents|
+            if klass != q_klass
+              documents.each do |document|
+                count += 1 if document.include?(term)
+              end
+            end
           end
+
+          results[q_klass][term] = count
         end
       end
-      
-      count
+
+      results
     end
     
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-      count = 0.0
+      @n_0_1 = pre_compute_n_0_1 unless @n_0_1
+            
+      @n_0_1[klass][term]
+    end
+    
+    # Pre-Computer n_0_1
+    def pre_compute_n_0_1
+      results = {}
       
-      @data[klass].each do |document|
-        count += 1 if !document.include?(term)
+      classes.each do |q_klass|
+        results[q_klass] = {}
+        
+        uniq_terms.each do |term|
+          count = 0.0
+
+          @data.each_pair do |klass, documents|
+            if klass == q_klass
+              documents.each do |document|
+                count += 1 if !document.include?(term)
+              end
+            end
+          end
+
+          results[q_klass][term] = count
+        end
       end
-      
-      count
+
+      results
     end
     
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      count = 0.0
+      @n_0_0 = pre_compute_n_0_0 unless @n_0_0
+            
+      @n_0_0[klass][term]
+    end
+    
+    # Pre-Computes all n_0_0 queries
+    def pre_compute_n_0_0
+      results = {}
       
-      @data.each_pair do |key, documents|
-        if key != klass
-          documents.each do |document|
-            count += 1 if !document.include?(term)
+      classes.each do |q_klass|
+        results[q_klass] = {}
+        
+        uniq_terms.each do |term|
+          count = 0.0
+
+          @data.each_pair do |klass, documents|
+            if klass != q_klass
+              documents.each do |document|
+                count += 1 if !document.include?(term)
+              end
+            end
           end
-        end #if key
-      end #@data.each_pair
-      
-      count
+
+          results[q_klass][term] = count
+        end
+      end
+
+      results
     end
     
     # All of the counts added together
@@ -76,9 +151,14 @@ module FeatureSelection
     def find_all_classes
       @data.map {|x| x[0]}
     end
+        
+    def uniq_terms
+      @uniq_terms ||= @data.map {|x| x[1]}.flatten.uniq
+    end
     
     def terms
       @data.map {|x| x[1]}.flatten
     end
+    
   end
 end
