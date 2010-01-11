@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{feature_selection}
-  s.version = "0.0.1"
+  s.version = "0.0.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["reddavis"]
-  s.date = %q{2010-01-07}
+  s.date = %q{2010-01-11}
   s.description = %q{A library of feature selection algorithms}
   s.email = %q{reddavis@gmail.com}
   s.extra_rdoc_files = [
@@ -26,10 +26,11 @@ Gem::Specification.new do |s|
      "benchmark/benchmark.rb",
      "feature_selection.gemspec",
      "lib/feature_selection.rb",
+     "lib/feature_selection/algorithms/chi_squared.rb",
+     "lib/feature_selection/algorithms/frequency_based.rb",
+     "lib/feature_selection/algorithms/mutual_information.rb",
      "lib/feature_selection/base.rb",
-     "lib/feature_selection/chi_squared.rb",
-     "lib/feature_selection/frequency_based.rb",
-     "lib/feature_selection/mutual_information.rb",
+     "lib/feature_selection/log_helpers.rb",
      "spec/feature_selection/base_spec.rb",
      "spec/feature_selection/chi_squared_spec.rb",
      "spec/feature_selection/frequency_based_spec.rb",
