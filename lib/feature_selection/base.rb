@@ -21,15 +21,21 @@ module FeatureSelection
     end
     
     def pre_compute_n_1_1
+      write_to_log("Pre-Computing N11")
       results = {}
+      
+      # Logger
+      n = 1
       
       classes.each do |q_klass|
         results[q_klass] = {}
         
         uniq_terms.each do |term|
+          log_calculations_complete(n)
+          n += 1
           count = 0.0
 
-          @data.each_pair do |klass, documents|
+          @data.each_pair do |klass, documents|            
             if klass == q_klass
               documents.each do |document|
                 count += 1 if document.include?(term)
@@ -53,12 +59,18 @@ module FeatureSelection
     
     # Pre-Computer n_1_0
     def pre_compute_n_1_0
+      write_to_log("Pre-Computing N10")
       results = {}
+      
+      # Logger
+      n = 1
       
       classes.each do |q_klass|
         results[q_klass] = {}
         
         uniq_terms.each do |term|
+          log_calculations_complete(n)
+          n += 1
           count = 0.0
 
           @data.each_pair do |klass, documents|
@@ -85,12 +97,18 @@ module FeatureSelection
     
     # Pre-Computer n_0_1
     def pre_compute_n_0_1
+      write_to_log("Pre-Computing N01")
       results = {}
+      
+      # Logger
+      n = 1
       
       classes.each do |q_klass|
         results[q_klass] = {}
         
         uniq_terms.each do |term|
+          log_calculations_complete(n)
+          n += 1
           count = 0.0
 
           @data.each_pair do |klass, documents|
@@ -117,12 +135,18 @@ module FeatureSelection
     
     # Pre-Computes all n_0_0 queries
     def pre_compute_n_0_0
+      write_to_log("Pre-Computing N00")
       results = {}
+      
+      # Logger
+      n = 1
       
       classes.each do |q_klass|
         results[q_klass] = {}
         
         uniq_terms.each do |term|
+          log_calculations_complete(n)
+          n += 1
           count = 0.0
 
           @data.each_pair do |klass, documents|
