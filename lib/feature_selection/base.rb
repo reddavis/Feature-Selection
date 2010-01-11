@@ -1,8 +1,10 @@
 module FeatureSelection
   class Base
+    include LogHelpers
     
-    def initialize(data)
+    def initialize(data, options={})
       @data = data
+      create_log(options[:log_to]) if options[:log_to]
     end
     
     def classes
@@ -158,6 +160,10 @@ module FeatureSelection
     
     def terms
       @terms ||= @data.map {|x| x[1]}.flatten
+    end
+    
+    def total_calculations
+      @total_calculations ||= uniq_terms.size * classes.size 
     end
     
   end

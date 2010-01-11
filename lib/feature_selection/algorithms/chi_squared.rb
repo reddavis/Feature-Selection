@@ -10,10 +10,15 @@ module FeatureSelection
       #=> {:class => {'term' => score, 'term' => score}}
       @results = {}
       
+      n = 1
+      
       classes.each do |klass|
         @results[klass] = {}
         
         uniq_terms.each do |term|
+          log_calculations_complete(n)
+          n += 1
+          
           answer = calculate_contribution(term, klass)
           @results[klass][term] = answer
         end #terms.each
