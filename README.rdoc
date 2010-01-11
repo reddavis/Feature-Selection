@@ -32,6 +32,18 @@ Example:
 
   a.rank_features
     #=> {:spam => {term => score, term => score}, :ham => {term => score}}
+    
+== Logging
+
+There are two ways to log the activity of algorithms:
+
+  # Provide a path to somewhere to log to
+  log = File.expand_path(File.dirname(__FILE__) + '/log.txt')
+  FeatureSelection::MutualInformation.new(data, :log_to => log)
+  
+  # Provide an existing Logger object
+  log = Logger.new('log.txt')
+  FeatureSelection::MutualInformation.new(data, :log_to => log)
           
 == Copyright
 
