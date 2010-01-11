@@ -35,9 +35,9 @@ Example:
     
 == Logging
 
-There are two ways to log the activity of algorithms:
+There are two ways to log the activity:
 
-  # Provide a path to somewhere to log to
+  # Provide a path of somewhere to log to
   log = File.expand_path(File.dirname(__FILE__) + '/log.txt')
   FeatureSelection::MutualInformation.new(data, :log_to => log)
   
