@@ -6,7 +6,7 @@ http://en.wikipedia.org/wiki/Feature_selection
 
 == Install
 
-  gem sources -a http://gems.github.com
+  gem sources -a http://gemcutter.org
   sudo gem install feature_selection
   
 == How To Use
