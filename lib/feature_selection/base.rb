@@ -31,7 +31,7 @@ module FeatureSelection
         results[q_klass] = {}
         
         uniq_terms.each do |term|
-          log_calculations_complete(n)
+          log_calculations_complete(n, '--N11--')
           n += 1
           count = 0.0
 
@@ -69,7 +69,7 @@ module FeatureSelection
         results[q_klass] = {}
         
         uniq_terms.each do |term|
-          log_calculations_complete(n)
+          log_calculations_complete(n, '--N10--')
           n += 1
           count = 0.0
 
@@ -107,7 +107,7 @@ module FeatureSelection
         results[q_klass] = {}
         
         uniq_terms.each do |term|
-          log_calculations_complete(n)
+          log_calculations_complete(n, '--N01--')
           n += 1
           count = 0.0
 
@@ -145,7 +145,7 @@ module FeatureSelection
         results[q_klass] = {}
         
         uniq_terms.each do |term|
-          log_calculations_complete(n)
+          log_calculations_complete(n, '--N00--')
           n += 1
           count = 0.0
 

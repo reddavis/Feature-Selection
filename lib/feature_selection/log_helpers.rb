@@ -19,7 +19,7 @@ module LogHelpers
   end
   
   # Writes the number of calculations completed to the log
-  def log_calculations_complete(n)
-    write_to_log("#{n}/#{total_calculations} calculations complete.")
+  def log_calculations_complete(n, other_text='')
+    write_to_log("#{n}/#{total_calculations} #{other_text} calculations complete.")
   end
 end
