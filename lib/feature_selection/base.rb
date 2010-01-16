@@ -26,6 +26,7 @@ module FeatureSelection
       save_marshalled_data
       
       # Start the workers
+      write_to_log("Starting Workers")
       start_workers(6)
       
       # Set which queue to use
@@ -59,6 +60,8 @@ module FeatureSelection
             
       # Wait until jobs are all complete
       until memcache.get('job_count', false).to_i == total_jobs
+        write_to_log("#{memcache.get('job_count', false).to_i} / #{total_jobs}")
+        sleep(10)
       end
       
       # Removed the marshalled documents
