@@ -1,6 +1,6 @@
 require 'beanstalk-client'
 require 'memcached'
-require 'FileUtils'
+require 'fileutils'
 
 module FeatureSelection
   class Base

@@ -1,9 +1,10 @@
+require 'rubygems'
 require File.expand_path(File.dirname(__FILE__) + '/../lib/feature_selection')
 require 'benchmark'
 
 data = {:ham => [], :spam => []}
 
-5000.times do
+500.times do
   a = rand(999).to_s
   
   data[:ham] << [a] * 5
