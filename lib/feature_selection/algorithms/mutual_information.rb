@@ -17,19 +17,16 @@ module FeatureSelection
   class MutualInformation < Base
         
     def rank_features
+      pre_compute_counts
+           
       # Returns:
       #=> {:class => {'term' => score, 'term' => score}}
       @results = {}
-      
-      n = 1
             
       classes.each do |klass|
         @results[klass] = {}
         
-        uniq_terms.each do |term|
-          log_calculations_complete(n)
-          n += 1
-          
+        uniq_terms.each do |term|          
           answer = calculate_contribution(term, klass)
           @results[klass][term] = answer
         end #terms.each
@@ -43,7 +40,7 @@ module FeatureSelection
       calculate_section(term, klass, 1, 1) +
         calculate_section(term, klass, 1, 0) +
           calculate_section(term, klass, 0, 1) +
-            calculate_section(term, klass, 0, 0)
+            calculate_section(term, klass, 0, 0) 
     end
     
     def calculate_section(term, klass, t, c)
@@ -54,7 +51,7 @@ module FeatureSelection
       begin
         if t == 1 && c == 1
           n_1_1 = n_1_1(term, klass)
-          
+                  
           # return 0 if a == 0
           a = (n * n_1_1) / ((n_0_1 + n_1_1) * (n_1_1 + n_1_0))
           return 0.0 if a == 0
@@ -64,7 +61,7 @@ module FeatureSelection
         elsif t == 1 && c == 0
           n_1_1 = n_1_1(term, klass)
           n_0_0 = n_0_0(term, klass)
-          
+                    
           # return 0 if a == 0
           a = (n * n_1_0) / ((n_1_1 + n_0_1) * (n_0_1 + n_0_0))
           return 0.0 if a == 0
