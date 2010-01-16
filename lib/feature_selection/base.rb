@@ -9,6 +9,7 @@ module FeatureSelection
     def initialize(data, options={})
       @data = data
       create_log(options[:log_to]) if options[:log_to]
+      @no_of_workers = options[:workers] || 4
     end
     
     def classes
@@ -27,7 +28,7 @@ module FeatureSelection
       
       # Start the workers
       write_to_log("Starting Workers")
-      start_workers(6)
+      start_workers(@no_of_workers)
       
       # Set which queue to use
       beanstalk.use('main')
@@ -61,7 +62,7 @@ module FeatureSelection
       # Wait until jobs are all complete
       until memcache.get('job_count', false).to_i == total_jobs
         write_to_log("#{memcache.get('job_count', false).to_i} / #{total_jobs}")
-        sleep(10)
+        sleep(5)
       end
       
       # Removed the marshalled documents
