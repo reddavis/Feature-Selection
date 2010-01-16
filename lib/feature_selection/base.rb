@@ -26,7 +26,7 @@ module FeatureSelection
       save_marshalled_data
       
       # Start the workers
-      start_workers(8)
+      start_workers(6)
       
       # Set which queue to use
       beanstalk.use('main')

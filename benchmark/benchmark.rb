@@ -3,7 +3,7 @@ require 'benchmark'
 
 data = {:ham => [], :spam => []}
 
-1000.times do
+5000.times do
   a = rand(999).to_s
   
   data[:ham] << [a] * 5
