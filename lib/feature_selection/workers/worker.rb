@@ -89,7 +89,7 @@ loop do
     count = n_0_0(job_data.term, documents_not_belonging_to_klass)
   end
       
-  memcached.set("#{job_data.term}_#{klass}_#{job_data.calculation}", count)
+  memcached.set("#{job_data.term.gsub(/\s+/, '@')}_#{klass}_#{job_data.calculation}", count)
 
   job.delete
 end

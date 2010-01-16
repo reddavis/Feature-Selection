@@ -62,7 +62,6 @@ module FeatureSelection
       # Wait until jobs are all complete
       until memcache.get('job_count', false).to_i == total_jobs
         write_to_log("#{memcache.get('job_count', false).to_i} / #{total_jobs}")
-        sleep(5)
       end
       
       # Removed the marshalled documents
@@ -110,22 +109,22 @@ module FeatureSelection
         
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      a = memcache.get("#{term}_#{klass}_n_1_1")
+      a = memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
     end
         
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      a = memcache.get("#{term}_#{klass}_n_1_0")
+      a = memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
     end
         
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-     a =  memcache.get("#{term}_#{klass}_n_0_1")
+     a =  memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
     end
         
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      a = memcache.get("#{term}_#{klass}_n_0_0")
+      a = memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
     end
   
     # All of the counts added together

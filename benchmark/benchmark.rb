@@ -2,17 +2,13 @@ require 'rubygems'
 require File.expand_path(File.dirname(__FILE__) + '/../lib/feature_selection')
 require 'benchmark'
 
-data = {:ham => [], :spam => []}
-
-500.times do
-  a = rand(999).to_s
-  
-  data[:ham] << [a] * 5
-  data[:spam] << [a] * 5
-end
+data = {
+:spam => [['this', 'is', 'some', 'yer', 'information'], ['this', 'is', 'something', 'that', 'is', 'information']],
+:ham => [['this', 'test', 'some', 'more', 'information'], ['there', 'are', 'some', 'things']],
+}
 
 Benchmark.bm do |x|
   x.report do
-    FeatureSelection::MutualInformation.new(data).rank_features
+    puts FeatureSelection::MutualInformation.new(data, :workers => 2).rank_features
   end
 end

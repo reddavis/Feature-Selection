@@ -22,7 +22,7 @@ module FeatureSelection
       # Returns:
       #=> {:class => {'term' => score, 'term' => score}}
       @results = {}
-            
+                  
       classes.each do |klass|
         @results[klass] = {}
         
