@@ -6,7 +6,7 @@ require 'spec/autorun'
 
 def data
   {
-  :spam => [['this', 'is', 'some', 'yer', 'information'], ['this', 'is', 'something', 'that', 'is', 'information']],
+  :spam => [['this', 'is', 'this', 'some', 'yer', 'information'], ['this', 'is', 'something', 'that', 'is', 'information']],
   :ham => [['this', 'test', 'some', 'more', 'information'], ['there', 'are', 'some', 'things']],
   }
 end
