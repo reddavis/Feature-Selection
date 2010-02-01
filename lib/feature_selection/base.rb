@@ -62,6 +62,7 @@ module FeatureSelection
       # Wait until jobs are all complete
       until memcache.get('job_count', false).to_i == total_jobs
         write_to_log("#{memcache.get('job_count', false).to_i} / #{total_jobs}")
+        sleep(1)
       end
       
       # Removed the marshalled documents
@@ -77,7 +78,7 @@ module FeatureSelection
         file.write(Marshal.dump(@data))
       end
     end
-    
+        
     def marshalled_document_path
       File.expand_path(File.dirname(__FILE__) + '/documents')
     end
