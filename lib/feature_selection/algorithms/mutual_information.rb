@@ -17,12 +17,14 @@ module FeatureSelection
   class MutualInformation < Base
         
     def rank_features
+      write_to_log("Precomputing")
       pre_compute_counts
            
       # Returns:
       #=> {:class => {'term' => score, 'term' => score}}
       @results = {}
-                  
+      
+      write_to_log("Final calculations")
       classes.each do |klass|
         @results[klass] = {}
         
