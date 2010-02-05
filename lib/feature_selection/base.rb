@@ -9,6 +9,7 @@ module FeatureSelection
     def initialize(data, options={})
       @data = data
       create_log(options[:log_to]) if options[:log_to]
+      create_temp_dirs(options[:temp_dir])
       @no_of_workers = options[:workers] || 4
     end
     
@@ -17,7 +18,7 @@ module FeatureSelection
     end
     
     private
-    
+        
     ## Steps
     # Marshal the documents
     # Power up some workers
@@ -62,13 +63,14 @@ module FeatureSelection
       # Wait until jobs are all complete
       until memcache.get('job_count', false).to_i == total_jobs
         write_to_log("#{memcache.get('job_count', false).to_i} / #{total_jobs}")
-        sleep(1)
+        sleep(2)
       end
+    
+      # Stop all workers
+      stop_workers
       
       # Removed the marshalled documents
       FileUtils.rm(marshalled_document_path)
-      # Stop all workers
-      stop_workers
     end
     
     # Create a file with the marshalled @data so that the workers can
@@ -78,19 +80,30 @@ module FeatureSelection
         file.write(Marshal.dump(@data))
       end
     end
-        
+    
+    # Path to the pids folder
+    def pids_folder
+      "#{@temp_dir}/pids"
+    end
+    
+    # Path to marshalled folder
+    def marshalled_folder
+      "#{@temp_dir}/marshalled"
+    end
+    
+    # Path to marshalled document
     def marshalled_document_path
-      File.expand_path(File.dirname(__FILE__) + '/documents')
+      marshalled_folder + '/marshalled_documents'
     end
     
     def start_workers(n)
       n.times do
-        system("ruby #{worker_daemon_path} start")
+        system("ruby #{worker_daemon_path} start #{pids_folder} -- #{marshalled_document_path}")
       end
     end
     
     def stop_workers
-      system("ruby #{worker_daemon_path} stop")
+      system("ruby #{worker_daemon_path} stop #{pids_folder}")
     end
     
     # Where the workers are kept
@@ -110,22 +123,22 @@ module FeatureSelection
         
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      a = memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
     end
         
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      a = memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
     end
         
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-     a =  memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
     end
         
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      a = memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
     end
   
     # All of the counts added together
@@ -146,5 +159,17 @@ module FeatureSelection
       @terms ||= @data.map {|x| x[1]}.flatten
     end
     
+    def create_temp_dirs(dir)
+      if dir
+        @temp_dir = dir
+        # Create pid folder
+        FileUtils.mkdir_p(pids_folder)
+        # Create folder to hold marshalled data
+        FileUtils.mkdir_p(marshalled_folder)
+      else
+        raise "You need to specify a path for the temporary files (:temp_dir => 'here')"
+      end
+    end
+        
   end
 end

@@ -54,7 +54,7 @@ connection.watch('main')
 # Connect to Memcached
 memcached = Memcached.new('localhost:11211')
 
-marshalled_document_path = File.expand_path(File.dirname(__FILE__) + '/../documents')
+marshalled_document_path = ARGV[0]
 
 data = ""
 File.open(marshalled_document_path) do |f|

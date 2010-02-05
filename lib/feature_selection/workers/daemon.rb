@@ -1,6 +1,7 @@
+require 'rubygems'
 require 'daemons'
 
-pids = File.expand_path(File.dirname(__FILE__) + '/pids/')
+pids = ARGV[1]
 worker = File.expand_path(File.dirname(__FILE__) + '/worker.rb')
 
 Daemons.run(
