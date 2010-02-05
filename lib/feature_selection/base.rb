@@ -58,6 +58,8 @@ module FeatureSelection
           total_jobs += 1
           beanstalk.put(Marshal.dump(job))
         end
+        
+        write_to_log("Placed #{total_jobs}/#{uniq_terms.size}")
       end
             
       # Wait until jobs are all complete
