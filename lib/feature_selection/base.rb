@@ -125,22 +125,38 @@ module FeatureSelection
         
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
+      begin
+        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
+      rescue Memcached::NotFound
+        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
+      end
     end
         
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
+      begin
+        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
+      rescue Memcached::NotFound
+        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
+      end
     end
         
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
+      begin
+        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
+      rescue Memcached::NotFound
+        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
+      end
     end
         
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
+      begin
+        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
+      rescue Memcached::NotFound
+        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
+      end
     end
   
     # All of the counts added together
@@ -154,11 +170,11 @@ module FeatureSelection
     end
             
     def uniq_terms
-      @uniq_terms ||= @data.map {|x| x[1]}.flatten.uniq
+      @uniq_terms ||= @data.map {|x| x[1]}.flatten.uniq.freeze
     end
     
     def terms
-      @terms ||= @data.map {|x| x[1]}.flatten
+      @terms ||= @data.map {|x| x[1]}.flatten.freeze
     end
     
     def create_temp_dirs(dir)
