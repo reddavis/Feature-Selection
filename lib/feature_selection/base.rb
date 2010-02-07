@@ -129,6 +129,7 @@ module FeatureSelection
         memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
       rescue Memcached::NotFound
         write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
+        0.0
       end
     end
         
@@ -138,6 +139,7 @@ module FeatureSelection
         memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
       rescue Memcached::NotFound
         write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
+        0.0
       end
     end
         
@@ -147,6 +149,7 @@ module FeatureSelection
         memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
       rescue Memcached::NotFound
         write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
+        0.0
       end
     end
         
@@ -156,6 +159,7 @@ module FeatureSelection
         memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
       rescue Memcached::NotFound
         write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
+        0.0
       end
     end
   
