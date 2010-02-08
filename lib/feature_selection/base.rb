@@ -38,7 +38,8 @@ module FeatureSelection
       memcache.set('job_count', 0, 0, nil)
       total_jobs = 0
       
-      write_to_log("Adding jobs to the queue")
+      write_to_log("Adding #{precalculated_jobs} jobs to the queue")   
+      
       uniq_terms.each do |term|
         jobs = []
         
@@ -59,7 +60,7 @@ module FeatureSelection
           beanstalk.put(Marshal.dump(job))
         end
         
-        write_to_log("Placed #{total_jobs}/#{uniq_terms.size}")
+        write_to_log("Placed #{total_jobs} / #{precalculated_jobs}")
       end
             
       # Wait until jobs are all complete
@@ -73,6 +74,10 @@ module FeatureSelection
       
       # Removed the marshalled documents
       FileUtils.rm(marshalled_document_path)
+    end
+    
+    def precalculated_jobs
+      uniq_terms * 2 * 4
     end
     
     # Create a file with the marshalled @data so that the workers can
