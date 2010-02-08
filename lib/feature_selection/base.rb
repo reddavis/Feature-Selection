@@ -77,7 +77,7 @@ module FeatureSelection
     end
     
     def precalculated_jobs
-      uniq_terms * 2 * 4
+      uniq_terms.size * 2 * 4
     end
     
     # Create a file with the marshalled @data so that the workers can
