@@ -1,4 +1,3 @@
-require 'rubygems'
 require 'beanstalk-client'
 require 'memcached'
 require File.expand_path(File.dirname(__FILE__) + '/../job')
@@ -52,7 +51,8 @@ connection = Beanstalk::Pool.new(['localhost:11300'])
 connection.watch('main')
 
 # Connect to Memcached
-memcached = Memcached.new('localhost:11211')
+memcached_server = ARGV[1]
+memcached = Memcached.new(memcached_server)
 
 marshalled_document_path = ARGV[0]
 

@@ -1,6 +1,7 @@
-require File.expand_path(File.dirname(__FILE__) + '/feature_selection/log_helpers')
-require File.expand_path(File.dirname(__FILE__) + '/feature_selection/base')
-require File.expand_path(File.dirname(__FILE__) + '/feature_selection/job')
-require File.expand_path(File.dirname(__FILE__) + '/feature_selection/algorithms/mutual_information')
-require File.expand_path(File.dirname(__FILE__) + '/feature_selection/algorithms/chi_squared')
-require File.expand_path(File.dirname(__FILE__) + '/feature_selection/algorithms/frequency_based')
+$:.unshift(File.dirname(__FILE__) + '/../lib')
+
+require 'feature_selection/base'
+require 'feature_selection/job'
+require 'feature_selection/algorithms/mutual_information'
+require 'feature_selection/algorithms/chi_squared'
+require 'feature_selection/algorithms/frequency_based'

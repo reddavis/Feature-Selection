@@ -1,3 +1,4 @@
+require 'feature_selection/log_helpers'
 require 'beanstalk-client'
 require 'memcached'
 require 'fileutils'
@@ -8,9 +9,11 @@ module FeatureSelection
     
     def initialize(data, options={})
       @data = data
+      @no_of_workers = options[:workers] || 4
+      @memcahed_sever = options[:memcached_server] || 'localhost:11211'
+      
       create_log(options[:log_to]) if options[:log_to]
       create_temp_dirs(options[:temp_dir])
-      @no_of_workers = options[:workers] || 4
     end
     
     def classes
@@ -105,7 +108,7 @@ module FeatureSelection
     
     def start_workers(n)
       n.times do
-        system("ruby #{worker_daemon_path} start #{pids_folder} -- #{marshalled_document_path}")
+        system("ruby #{worker_daemon_path} start #{pids_folder} -- #{marshalled_document_path} #{@memcahed_sever}")
       end
     end
     
@@ -125,7 +128,7 @@ module FeatureSelection
     
     # Connect to Memcached
     def memcache
-      @memcache ||= Memcached.new('localhost:11211')
+      @memcache ||= Memcached.new(@memcahed_sever)
     end
         
     # Contains term and belongs to class
