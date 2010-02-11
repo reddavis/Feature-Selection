@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'beanstalk-client'
-require 'memcached'
+require 'rufus/tokyo'
 require File.expand_path(File.dirname(__FILE__) + '/../job')
 
 # Contains term and belongs to class
@@ -51,8 +51,8 @@ end
 connection = Beanstalk::Pool.new(['localhost:11300'])
 connection.watch('main')
 
-# Connect to Memcached
-memcached = Memcached.new('localhost:11211')
+# Connect to Tokyo
+tokyo_cabinet = Rufus::Tokyo::Cabinet.new(ARGV[1])
 
 marshalled_document_path = ARGV[0]
 
@@ -70,7 +70,7 @@ loop do
   
   job_data = Marshal.load(job.body)
   
-  memcached.increment('job_count')
+  tokyo_cabinet.incr('job_count')
   
   klass = job_data.klass
   term = job_data.term
@@ -89,7 +89,7 @@ loop do
     count = n_0_0(job_data.term, documents_not_belonging_to_klass)
   end
       
-  memcached.set("#{job_data.term.gsub(/\s+/, '@')}_#{klass}_#{job_data.calculation}", count)
+  tokyo_cabinet["#{job_data.term.gsub(/\s+/, '@')}_#{klass}_#{job_data.calculation}"] = count
 
   job.delete
 end
