@@ -133,42 +133,22 @@ module FeatureSelection
         
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      begin
-        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
-      rescue Memcached::NotFound
-        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
-        0.0
-      end
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1")
     end
         
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      begin
-        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
-      rescue Memcached::NotFound
-        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
-        0.0
-      end
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0")
     end
         
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-      begin
-        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
-      rescue Memcached::NotFound
-        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
-        0.0
-      end
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1")
     end
         
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      begin
-        memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
-      rescue Memcached::NotFound
-        write_to_log("Cant find #{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
-        0.0
-      end
+      memcache.get("#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0")
     end
   
     # All of the counts added together
