@@ -15,6 +15,8 @@ tmp_dir = File.expand_path(File.dirname(__FILE__) + '/tmp')
 
 #Benchmark.bm do |x|
 #  x.report do
-    FeatureSelection::MutualInformation.new(data, :workers => 2, :log_to => log, :temp_dir => tmp_dir).rank_features
+    FeatureSelection::MutualInformation.new(data, :workers => 2, 
+                                                  :log_to => log, 
+                                                  :temp_dir => tmp_dir).rank_features
 #  end
 #end

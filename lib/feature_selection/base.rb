@@ -1,7 +1,7 @@
 require 'feature_selection/paths'
 require 'feature_selection/log_helpers'
 require 'beanstalk-client'
-require 'rufus/tokyo'
+require 'rufus/tokyo/tyrant'
 require 'fileutils'
 
 module FeatureSelection
@@ -11,9 +11,10 @@ module FeatureSelection
     
     def initialize(data, options={})
       @data = data
+      @no_of_workers = options[:workers] || 4
+      @tyrant_server = options[:tyrant_server] || {:port => 1978, :ip => '127.0.0.1'}
       create_log(options[:log_to]) if options[:log_to]
       create_temp_dirs(options[:temp_dir])
-      @no_of_workers = options[:workers] || 4
     end
     
     def classes
@@ -39,7 +40,7 @@ module FeatureSelection
         beanstalk.use('main')
       
         # Set jobs complete count
-        tokyo_cabinet.incr('job_count', 0)
+        tokyo_tyrant.incr('job_count', 0)
         total_jobs = 0
               
         write_to_log("Adding #{precalculated_jobs} jobs to the queue")   
@@ -66,10 +67,10 @@ module FeatureSelection
         
           write_to_log("Placed #{total_jobs} / #{precalculated_jobs}")
         end
-            
+                 
         # Wait until jobs are all complete
-        until tokyo_cabinet['job_count'] == total_jobs
-          write_to_log("#{tokyo_cabinet.counter_value('job_count')} / #{total_jobs}")
+        until tokyo_tyrant.counter_value('job_count') == total_jobs
+          write_to_log("#{tokyo_tyrant.counter_value('job_count')} / #{total_jobs}")
           sleep(2)
         end
     
@@ -98,7 +99,7 @@ module FeatureSelection
         
     def start_workers(n)
       n.times do
-        system("ruby #{worker_daemon_path} start #{pids_folder} -- #{marshalled_document_path} #{tokyo_cabinet_path}")
+        system("ruby #{worker_daemon_path} start #{pids_folder} -- #{marshalled_document_path} #{@tyrant_server[:ip]} #{@tyrant_server[:port]}")
       end
     end
     
@@ -116,29 +117,29 @@ module FeatureSelection
       @beanstalk ||= Beanstalk::Pool.new(['localhost:11300'])
     end
     
-    # Connect to Tokyo Cabinet
-    def tokyo_cabinet
-      @tokyo_cabinet ||= Rufus::Tokyo::Cabinet.new(tokyo_cabinet_path)
+    # Connect to Tokyo Tyrant
+    def tokyo_tyrant
+      @tokyo_tyrant ||= Rufus::Tokyo::Tyrant.new(@tyrant_server[:ip], @tyrant_server[:port])
     end
             
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      tokyo_cabinet["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1"]
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1"].to_i
     end
         
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      tokyo_cabinet["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0"]
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0"].to_i
     end
         
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-      tokyo_cabinet["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1"]
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1"].to_i
     end
         
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      tokyo_cabinet["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0"]
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0"].to_i
     end
   
     # All of the counts added together
@@ -166,10 +167,6 @@ module FeatureSelection
         FileUtils.mkdir_p(pids_folder)
         # Create folder to hold marshalled data
         FileUtils.mkdir_p(marshalled_folder)
-        # Create folder to hold Tokyo Cabinet DB
-        FileUtils.mkdir_p(tokyo_cabinet_folder)
-        # Make Tokyo Cabinet File
-        FileUtils.touch(tokyo_cabinet_path)
       else
         raise "You need to specify a path for the temporary files (:temp_dir => 'here')"
       end
