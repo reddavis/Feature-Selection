@@ -12,12 +12,6 @@ def data
   }
 end
 
-def with_memcached
-  fork { system("memcached") }  
-  yield
-  system('killall memcached')  # Kills both the ruby an memcached process
-end
-
 def with_beanstalkd
   fork { system("beanstalkd") }
   yield

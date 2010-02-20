@@ -67,10 +67,12 @@ module FeatureSelection
         
           write_to_log("Placed #{total_jobs} / #{precalculated_jobs}")
         end
-                 
-        # Wait until jobs are all complete
-        until tokyo_tyrant.counter_value('job_count') == total_jobs
-          write_to_log("#{tokyo_tyrant.counter_value('job_count')} / #{total_jobs}")
+        
+        jobs_processed = 0
+        # Stop when we stop processing jobs
+        until tokyo_tyrant.counter_value('job_count') == jobs_processed
+          jobs_processed = tokyo_tyrant.counter_value('job_count')
+          write_to_log("#{jobs_processed} / #{precalculated_jobs}")
           sleep(2)
         end        
       ensure
@@ -120,22 +122,22 @@ module FeatureSelection
             
     # Contains term and belongs to class
     def n_1_1(term, klass)
-      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1"].to_i
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_1"].to_f
     end
         
     # Contains term but does not belong to class
     def n_1_0(term, klass)
-      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0"].to_i
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_1_0"].to_f
     end
         
     # Does not contain term but belongs to class
     def n_0_1(term, klass)
-      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1"].to_i
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_1"].to_f
     end
         
     # Does not contain term and does not belong to class
     def n_0_0(term, klass)
-      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0"].to_i
+      tokyo_tyrant["#{term.gsub(/\s+/, '@')}_#{klass}_n_0_0"].to_f
     end
   
     # All of the counts added together
